@@ -107,7 +107,7 @@ accel_df = read_csv("./data/accel_data.csv") %>%
   pivot_longer(
     cols = starts_with("activity_"),
     names_to = "observation",
-    values_to = "n_activities"
+    values_to = "n_activ"
   ) %>% 
   mutate(
     weekday_vs_weekend = case_when(
@@ -131,4 +131,15 @@ The resulting dataset contains information about everyday "activity counts" in e
 * It contains `r nrow(accel_df)` rows and `r ncol(accel_df)` variables.
 
 * The dataset provides information on "activity counts" of the man in days in five weeks. The counting starts at the midnight of each day and "activity counts" in each observations in each days are given. Also, information about which week a certain day belongs to, day of the week and whether that day is a weekday or weekend can be obtained.
+
+Then I aggregate accross minutes to create a total activity variable for each day and create a table.
+
+```{r}
+accel_df %>% 
+  group_by(day_id) %>% 
+  summarise(
+    total_activ = sum(n_activ)
+      ) %>% 
+  knitr::kable()
+```
 
