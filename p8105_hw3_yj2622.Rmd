@@ -116,20 +116,23 @@ accel_df = read_csv("./data/accel_data.csv") %>%
       day %in% c("Saturday","Sunday")~"weekend"
     ),
     day = factor(day),
-    day = fct_relevel(day, c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"))
+    day = fct_relevel(day, c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")),
+    minute = as.double(minute)
   )
 
 ```
 
 The steps I took to wrangle the dataset include:
 
-* clean the column names;
+* Clean the column names;
 
-* change the dataset from wide format into long format;
+* Change the dataset from wide format into long format;
 
-* create a new column named `weekday_vs_weekend` to indicate whether a certain day is a weekday or a weekend;
+* Create a new column named `weekday_vs_weekend` to indicate whether a certain day is a weekday or a weekend;
 
-* change the `day` variable into factor and relevel it.
+* Change the `day` variable into factor and relevel it;
+
+* Change the `minute` variable into double.
 
 The resulting dataset contains information about everyday "activity counts" in each commonly one-minute intervals of a 63 year-old male diagnosed with CHF. And the time range is five weeks. 
 
@@ -139,7 +142,7 @@ The resulting dataset contains information about everyday "activity counts" in e
 
 Then I aggregate across minutes to create a total activity variable for each day and create a table.
 
-```{r}
+```{r day_total_activ_tb}
 accel_df %>% 
   group_by(week, day) %>% 
   summarise(
@@ -153,4 +156,23 @@ accel_df %>%
 ```
 
 According to the resulting table, this man is less active on Monday and active on the other days in the first two weeks. He is less active on weekends, especially on Saturday, in the last two weeks. 
+
+Next I make a single-panel plot that shows the 24-hour activity time courses for each day. To better indicate the time of a day, I change the labels of x axis into hours.
+
+```{r}
+accel_df %>% 
+  ggplot(aes(x = minute, y = n_activ, color = day)) +
+  geom_point(alpha = .4) +
+  scale_x_continuous(
+    breaks = c(240,480,720,960,1200,1440),
+    labels = c("4","8","12","16","20","24")
+  ) +
+  labs(
+    title = "Activity Counts for Each Day",
+    x = "time (hour)",
+    y = "activity counts" 
+  ) +
+  geom_line()
+  
+```
 
