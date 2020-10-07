@@ -125,3 +125,10 @@ The steps I took to wrangle the dataset include:
 * tidy the dataset with `pivot_longer`;
 
 * create a new column named `weekday_vs_weekend` to indicate whether a certain day is a weekday or a weekend.
+
+The resulting dataset contains information about everyday "activity counts" in each commonly one-minute intervals of a 63 year-old male diagnosed with CHF. And the time range is five weeks. 
+
+* It contains `r nrow(accel_df)` rows and `r ncol(accel_df)` variables.
+
+* The dataset provides information on "activity counts" of the man in days in five weeks. The counting starts at the midnight of each day and "activity counts" in each observations in each days are given. Also, information about which week a certain day belongs to, day of the week and whether that day is a weekday or weekend can be obtained.
+
