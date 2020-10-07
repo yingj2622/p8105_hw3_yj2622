@@ -106,14 +106,17 @@ accel_df = read_csv("./data/accel_data.csv") %>%
   janitor::clean_names() %>% 
   pivot_longer(
     cols = starts_with("activity_"),
-    names_to = "observation",
+    names_to = "minute",
+    names_prefix = "activity_",
     values_to = "n_activ"
   ) %>% 
   mutate(
     weekday_vs_weekend = case_when(
       day %in% c("Monday","Tuesday","Wednesday","Thursday","Friday")~"weekday",
       day %in% c("Saturday","Sunday")~"weekend"
-    )
+    ),
+    day = factor(day),
+    day = fct_relevel(day, c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"))
   )
 
 ```
@@ -122,24 +125,31 @@ The steps I took to wrangle the dataset include:
 
 * clean the column names;
 
-* tidy the dataset with `pivot_longer`;
+* change the dataset from wide format into long format;
 
-* create a new column named `weekday_vs_weekend` to indicate whether a certain day is a weekday or a weekend.
+* create a new column named `weekday_vs_weekend` to indicate whether a certain day is a weekday or a weekend;
+
+* change the `day` variable into factor and relevel it.
 
 The resulting dataset contains information about everyday "activity counts" in each commonly one-minute intervals of a 63 year-old male diagnosed with CHF. And the time range is five weeks. 
 
 * It contains `r nrow(accel_df)` rows and `r ncol(accel_df)` variables.
 
-* The dataset provides information on "activity counts" of the man in days in five weeks. The counting starts at the midnight of each day and "activity counts" in each observations in each days are given. Also, information about which week a certain day belongs to, day of the week and whether that day is a weekday or weekend can be obtained.
+* The dataset provides five-week observations on "activity counts" of a man. The counting starts at the midnight of each day and "activity counts" in each observations in each days are given. Also, information about which week a certain day belongs to, day of the week and whether that day is a weekday or weekend can be obtained.
 
-Then I aggregate accross minutes to create a total activity variable for each day and create a table.
+Then I aggregate across minutes to create a total activity variable for each day and create a table.
 
 ```{r}
 accel_df %>% 
-  group_by(day_id) %>% 
+  group_by(week, day) %>% 
   summarise(
     total_activ = sum(n_activ)
       ) %>% 
+  pivot_wider(
+    names_from = day,
+    values_from = total_activ
+  ) %>% 
   knitr::kable()
 ```
+
 
