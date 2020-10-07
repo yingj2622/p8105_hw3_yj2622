@@ -97,3 +97,31 @@ instacart %>%
   knitr::kable()
 ```
 
+## Problem 2
+
+First, load the accelerometer dataset and tidy it.
+
+```{r}
+accel_df = read_csv("./data/accel_data.csv") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    cols = starts_with("activity_"),
+    names_to = "observation",
+    values_to = "n_activities"
+  ) %>% 
+  mutate(
+    weekday_vs_weekend = case_when(
+      day %in% c("Monday","Tuesday","Wednesday","Thursday","Friday")~"weekday",
+      day %in% c("Saturday","Sunday")~"weekend"
+    )
+  )
+
+```
+
+The steps I took to wrangle the dataset include:
+
+* clean the column names;
+
+* tidy the dataset with `pivot_longer`;
+
+* create a new column named `weekday_vs_weekend` to indicate whether a certain day is a weekday or a weekend.
