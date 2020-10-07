@@ -101,7 +101,7 @@ instacart %>%
 
 First, load the accelerometer dataset and tidy it.
 
-```{r}
+```{r load_tidy_accel, warning = FALSE, message= FALSE}
 accel_df = read_csv("./data/accel_data.csv") %>% 
   janitor::clean_names() %>% 
   pivot_longer(
