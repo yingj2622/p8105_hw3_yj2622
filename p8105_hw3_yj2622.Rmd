@@ -152,4 +152,5 @@ accel_df %>%
   knitr::kable()
 ```
 
+According to the resulting table, this man is less active on Monday and active on the other days in the first two weeks. He is less active on weekends, especially on Saturday, in the last two weeks. 
 
