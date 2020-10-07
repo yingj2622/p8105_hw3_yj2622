@@ -176,3 +176,4 @@ accel_df %>%
   
 ```
 
+Based on the plot above, it can be seen that in general, the man is active in the morning between 6 to 8 o'clock, in the noon about 11 o'clock and at night about 20 to 22 o'clock. He is most active at night (20 to 22 o'clock) and least active after 22 o'clock until the next day morning.
