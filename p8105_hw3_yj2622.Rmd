@@ -177,7 +177,7 @@ accel_df %>%
 
 Based on the plot above, it can be seen that in general, the man is most active at night (about 20 to 22 o'clock) and least active after 22 o'clock until the next day morning (about 6 o'clock). We can also see that he is very active in the noon, about 11 to 12 o'clock, on Sunday. Somtimes  the man is very active at other time, like about 7:00 on Thursday, 7:30 on Sunday, and 16:00 - 17:00 on Saturday and Sunday.
 
-## Problem
+## Problem 3
 
 Load NY NOAA dataset
 
@@ -202,18 +202,27 @@ Then clean the dataset.
 ny_noaa_df = 
   ny_noaa %>% 
   mutate(
-    id = factor(id),
     tmin = as.numeric(tmin),
-    tmax = as.numeric(tmax)
+    tmax = as.numeric(tmax),
+    tmax = tmax/10,
+    tmin = tmin/10
   ) %>% 
-  separate(date,into = c("year","month","day"),sep = "-")
+  separate(date,into = c("year","month","day"),sep = "-") %>% 
+  mutate(
+    month = as.numeric(month),
+    month = month.abb[month],
+    ) 
 ```
 
 The cleaning steps include:
 
-* Convert `id` into factor and convert `tmin` and `tmax` into number;
+* Convert `tmin` and `tmax` into number;
 
-* Create separate variables `year`, `month` and `day` from `date`.
+* Change the units of `tmax` and `tmin` into degree C;
+
+* Create separate variables `year`, `month` and `day` from `date`;
+
+* Change the values of `month` into corresponding month abbreviation.
 
 Then get the most frequently observed value for snowfall.
 
@@ -225,5 +234,32 @@ ny_noaa_df %>%
   arrange(desc(n_obs))
 ```
 
-It can be seen that the most common values of snowfall is 0 mm. That's because most of time there is no snowfall in Ny state.
+It can be seen that the most common value of snowfall is 0 mm. That's because most of time there is no snowfall in NY state.
+
+Next, I make plot of average `year` vs `tmax`.
+
+```{r}
+ny_noaa_df %>% 
+  filter(
+    month %in% c("Jan","Jul"),
+    !(is.na(tmax))
+    ) %>% 
+  group_by(id,year,month) %>% 
+  summarise(
+    mean_tmax = mean(tmax,na.rm = TRUE)
+  ) %>% 
+  ggplot(aes(x = year, y = mean_tmax, group = id, color = id)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(month~.) +
+  labs(
+    title = "Average Maximum Temperature in Jan and Jul over Years",
+    x = "year",
+    y = "average maximum temperature(C)"
+  ) +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(angle = 90, vjust = .5,hjust = 1)
+    )
+```
 
