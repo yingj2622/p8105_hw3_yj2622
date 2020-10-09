@@ -9,6 +9,8 @@ output: github_document
 library(tidyverse)
 library(p8105.datasets)
 library(patchwork)
+library(ggridges)
+library(hexbin)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -278,36 +280,35 @@ Then I make a plot showing `tmax` vs `tmin`.
 tmax_plot = 
   ny_noaa_df %>% 
   filter(
-    !(is.na(tmax))
-  ) %>% 
-  ggplot(aes(y = tmax)) +
-  geom_boxplot() +
-  labs(
-    title = "Distribution of Maximum Temperature",
-    y = "maximum temperature(C)"
-  ) +
-  scale_y_continuous(
-    limits = c(-60,60)
-  ) +
-  guides(
-    x = "none"
-  )
-
-tmin_plot = 
-  ny_noaa_df %>% 
-  filter(
+    !(is.na(tmax)),
     !(is.na(tmin))
   ) %>% 
-  ggplot(aes(y = tmin)) +
-  geom_boxplot() +
+  ggplot(aes(x = tmax, y = tmin)) +
+  geom_hex() +
   labs(
-    title = "Distribution of Minimum Temperature",
+    title = "Maximum Temperature vs. Minimum Temperature",
+    x = "maximum temperature(C)",
     y = "minimum temperature(C)"
   ) +
-  guides(
-    x = "none"
+  theme(legend.position = "right")
+```
+
+At last, I make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
+
+```{r}
+snow_plot = 
+  ny_noaa_df %>% 
+  filter(
+   (snow > 0) & (snow < 100)
+  ) %>% 
+  ggplot(aes(x = snow, y = year)) +
+  geom_density_ridges() +
+  labs(
+    title = "Distribution of Snowfall Over Years",
+    x = "snowfall(mm)",
+    caption = "The snowfall is greater than 0 and less than 100 mm."
   )
 
-tmax_plot + tmin_plot
+
 ```
 
