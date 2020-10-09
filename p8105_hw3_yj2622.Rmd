@@ -176,3 +176,41 @@ accel_df %>%
 ```
 
 Based on the plot above, it can be seen that in general, the man is most active at night (about 20 to 22 o'clock) and least active after 22 o'clock until the next day morning (about 6 o'clock). We can also see that he is very active in the noon, about 11 to 12 o'clock, on Sunday. Somtimes  the man is very active at other time, like about 7:00 on Thursday, 7:30 on Sunday, and 16:00 - 17:00 on Saturday and Sunday.
+
+## Problem
+
+Load NY NOAA dataset
+
+```{r}
+data("ny_noaa")
+```
+ 
+We can see that:
+
+* This dataset provides information of total daily precipitation, snowfall, snow depth, maximum and minimum temperature for all New York state weather stations on each day from January 1, 1981 through December 31, 2010; 
+
+* NY NOAA dataset contains `r nrow(ny_noaa)` rows and `r ncol(ny_noaa)
+` variables;
+
+* Key variables include weather station ID, date, snowfall, snow depth, maximum and  minimum temperature;
+
+* There are NAs in records of weather stations,especially in `tmin` and `tmax`.
+
+Then clean the dataset.
+
+```{r}
+ny_noaa_df = 
+  ny_noaa %>% 
+  mutate(
+    id = factor(id),
+    tmin = as.numeric(tmin),
+    tmax = as.numeric(tmax)
+  ) %>% 
+  separate(date,into = c("year","month","day"),sep = "-")
+```
+
+The cleaning steps include:
+
+* Convert `id` into factor and convert `tmin` and `tmax` into number;
+
+* Create separate variables `year`, `month` and `day` from `date`.
