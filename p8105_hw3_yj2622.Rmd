@@ -214,3 +214,16 @@ The cleaning steps include:
 * Convert `id` into factor and convert `tmin` and `tmax` into number;
 
 * Create separate variables `year`, `month` and `day` from `date`.
+
+Then get the most frequently observed value for snowfall.
+
+```{r}
+ny_noaa_df %>% 
+  filter(!(is.na(snow))) %>% 
+  group_by(snow) %>% 
+  summarise(n_obs = n()) %>% 
+  arrange(desc(n_obs))
+```
+
+It can be seen that the most common values of snowfall is 0 mm. That's because most of time there is no snowfall in Ny state.
+
