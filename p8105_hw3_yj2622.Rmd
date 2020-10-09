@@ -290,7 +290,7 @@ tmax_plot =
     x = "maximum temperature(C)",
     y = "minimum temperature(C)"
   ) +
-  theme(legend.position = "right")
+  scale_color_manual(labels = c("1k","2k","3k","4k","5k"))
 ```
 
 At last, I make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
@@ -310,5 +310,11 @@ snow_plot =
   )
 
 
+```
+
+In the end, I join the two plots above together.
+
+```{r}
+snow_plot + tmax_plot
 ```
 
