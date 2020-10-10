@@ -197,7 +197,7 @@ We can see that:
 
 * Key variables include weather station ID, date, snowfall, snow depth, maximum and  minimum temperature;
 
-* There are missing values in records of weather stations,especially in `tmin` and `tmax`.
+* There are missing values in `prcp`, `snow`, `snwd` and especially in `tmin` and `tmax`, in which missing values take about `r ny_noaa %>% pull(tmin) %>% is.na() %>% sum()/nrow(ny_noaa)*100 `% and `r  ny_noaa %>% pull(tmax) %>% is.na() %>% sum()/nrow(ny_noaa)*100`% of total records respectively.
 
 Then clean the dataset.
 
