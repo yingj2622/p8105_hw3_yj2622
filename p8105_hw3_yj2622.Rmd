@@ -5,7 +5,7 @@ date: "2020/10/6"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
 library(tidyverse)
 library(p8105.datasets)
 library(patchwork)
@@ -66,7 +66,7 @@ instacart %>%
     aisle = factor(aisle),
     aisle = forcats::fct_reorder(aisle,n)
   ) %>% 
-  ggplot(aes(x = aisle, y =n)) +
+  ggplot(aes(x = aisle, y = n)) +
   geom_point() +
   theme(axis.text.x = element_text(angle = 90, vjust = .5,hjust = 1))
 ```
@@ -120,7 +120,7 @@ accel_df = read_csv("./data/accel_data.csv") %>%
     ),
     day = factor(day),
     day = fct_relevel(day, c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")),
-    minute = as.double(minute)
+    minute = as.numeric(minute)
   )
 
 ```
@@ -135,13 +135,13 @@ The steps I took to wrangle the dataset include:
 
 * Change the `day` variable into factor and relevel it;
 
-* Change the `minute` variable into double.
+* Change the `minute` variable into numeric.
 
-The resulting dataset contains information about everyday "activity counts" in each commonly one-minute intervals of a 63 year-old male diagnosed with CHF. And the time range is five weeks. 
+The resulting dataset contains information about everyday "activity counts" of a 63 year-old male diagnosed with CHF for five weeks. The intervals are usually one minute. 
 
 * It contains `r nrow(accel_df)` rows and `r ncol(accel_df)` variables.
 
-* The dataset provides five-week observations on "activity counts" of a man. The counting starts at the midnight of each day and "activity counts" in each observations in each days are given. Also, information about which week a certain day belongs to, day of the week and whether that day is a weekday or weekend can be obtained.
+* The dataset provides five-week observations on "activity counts" of a man. The counting started at the midnight of each day with one-minute intervals. Also, information about the week which a certain day belongs to, day of the week and whether that day is a weekday or weekend is given.
 
 Then I aggregate across minutes to create a total activity variable for each day and create a table.
 
@@ -170,7 +170,7 @@ accel_df %>%
     labels = c("4","8","12","16","20","24")
   ) +
   labs(
-    title = "Activity Counts for Each Day",
+    title = "Activity Counts for Each Day Over Five Weeks",
     x = "time (hour)",
     y = "activity counts" 
   ) +
@@ -197,7 +197,7 @@ We can see that:
 
 * Key variables include weather station ID, date, snowfall, snow depth, maximum and  minimum temperature;
 
-* There are NAs in records of weather stations,especially in `tmin` and `tmax`.
+* There are missing values in records of weather stations,especially in `tmin` and `tmax`.
 
 Then clean the dataset.
 
@@ -272,6 +272,8 @@ Below are interpretions of the plot:
 
 * It can be noticed that the average maximum temperature in January is more variable than July;
 
+* In general, the maximum temperature of NY state in both January and July from 1981 to 2010 got warmer;
+
 * There are outliers of the average maximum temperature in both January and July. For example, in July, 1988, the average of maximum temperature recorded by one station is very low compared to others. And in January, 2005, there is also a very low average maximum temperature recorded by one station.
 
 Then I make a plot showing `tmax` vs `tmin`.
@@ -292,7 +294,7 @@ tmax_plot =
   ) +
   theme(legend.key.width = unit(1.2, "cm"),
         plot.title = element_text(size = 10),
-        text = element_text(size=7)) 
+        text = element_text(size = 7)) 
 ```
 
 At last, I make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
@@ -312,7 +314,7 @@ snow_plot =
   ) + 
   theme(plot.title = element_text(size = 10),
         plot.caption = element_text(hjust = 0,size = 8),
-        text = element_text(size=7))
+        text = element_text(size = 7))
 ```
 
 In the end, I combine the two panels above together.
@@ -321,3 +323,4 @@ In the end, I combine the two panels above together.
 snow_plot + tmax_plot
 ```
 
+It can be seen that from 1981 to 2010, the amount of snowfall in NY state decreased. Over this time period, the maximum temperature was mainly between 0 ~ 30 degrees C, and the minumum temperature was mainly between -5 ~ 20 degrees C.
