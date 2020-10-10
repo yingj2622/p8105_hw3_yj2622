@@ -182,10 +182,14 @@ Based on the plot above, it can be seen that in general, the man is most active 
 
 ## Problem 3
 
-Load NY NOAA dataset
+Load NY NOAA dataset and count missing values in `tmin` and `tmax`.
 
 ```{r}
 data("ny_noaa")
+
+n_na_tmin = ny_noaa %>% pull(tmin) %>% is.na() %>% sum()
+
+n_na_tmax = ny_noaa %>% pull(tmax) %>% is.na() %>% sum()
 ```
  
 We can see that:
@@ -197,7 +201,7 @@ We can see that:
 
 * Key variables include weather station ID, date, snowfall, snow depth, maximum and  minimum temperature;
 
-* There are missing values in `prcp`, `snow`, `snwd` and especially in `tmin` and `tmax`, in which missing values take about `r ny_noaa %>% pull(tmin) %>% is.na() %>% sum()/nrow(ny_noaa)*100 `% and `r  ny_noaa %>% pull(tmax) %>% is.na() %>% sum()/nrow(ny_noaa)*100`% of total records respectively.
+* There are missing values in `prcp`, `snow`, `snwd` and especially in `tmin` and `tmax`, in which missing values take about `r round(n_na_tmin/nrow(ny_noaa)*100, digits = 3)`% and `r round(n_na_tmax/nrow(ny_noaa)*100, digits = 3)`% of total records respectively.
 
 Then clean the dataset.
 
