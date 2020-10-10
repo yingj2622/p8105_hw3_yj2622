@@ -243,7 +243,7 @@ ny_noaa_df %>%
 
 It can be seen that the most common value of snowfall is 0 mm. That's because most of time there is no snowfall in NY state.
 
-Next, I make plot of `year` vs average `tmax` oberved in differnt stations in January and July separately.
+Next, I make plot of `year` vs average `tmax` oberved in differnt stations in January and July separately. (I delete the legend because they heavily influence the display of the figure.)
 
 ```{r}
 ny_noaa_df %>% 
